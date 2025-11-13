@@ -1,14 +1,22 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+}
+
+// local.propertiesの読み込み (APIキーを読み取る)
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.inputStream().use { localProperties.load(it) }
 }
 
 android {
     namespace = "com.example.food_app"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.food_app"
@@ -18,6 +26,10 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // APIキーをBuildConfigに設定
+        val apiKey = localProperties.getProperty("HOT_PEPPER_API_KEY") ?: ""
+        buildConfigField("String", "HOT_PEPPER_API_KEY", "\"$apiKey\"")
     }
 
     buildTypes {
@@ -38,6 +50,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -57,4 +70,11 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+    //retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
+    //Gson converter
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    //Gson
+    implementation("com.google.code.gson:gson:2.10.1")
 }
