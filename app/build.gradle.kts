@@ -94,4 +94,10 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.6.0")
     //HttpLoggingInterceptor
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+    //Play Services Location
+    implementation("com.google.android.gms:play-services-location:21.1.0")
+    // Accompanist Permissions
+    implementation("com.google.accompanist:accompanist-permissions:0.34.0")
+    // Coroutines Play Services (await()用)
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
 }

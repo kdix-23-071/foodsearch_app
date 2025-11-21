@@ -151,7 +151,7 @@ fun DetailScreenPreview() {
         genre = Genre("居酒屋", "説明", "G001"),
         budget = Budget("B001", "3000円", "3000円"),
         catch = "美味しい料理と空間を提供します。宴会にも最適！",
-        capacity = 50,
+        capacity = "50",
         access = "JR東京駅 八重洲北口 徒歩1分",
         mobileAccess = "東京駅徒歩1分",
         urls = Urls("http://example.com"),
