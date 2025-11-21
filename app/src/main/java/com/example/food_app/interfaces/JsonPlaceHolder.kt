@@ -16,6 +16,7 @@ interface JsonPlaceHolder {
         @Query("lat") lat: Double,
         @Query("lng") lng: Double,
         @Query("range") range: Int,
+        @Query("genre") code: String? = null, // 引数名をcodeに変更
         @Query("start") start: Int,
         @Query("count") count: Int,
         @Query("format") format: String = "json"

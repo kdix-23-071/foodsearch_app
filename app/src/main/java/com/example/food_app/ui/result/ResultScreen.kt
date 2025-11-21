@@ -175,7 +175,7 @@ fun ResultScreenPreview() {
     // プレビュー用にJsonPlaceHolderのフェイク実装を作成
     val fakeApi = object : JsonPlaceHolder {
         override suspend fun search(
-            key: String, lat: Double, lng: Double, range: Int, start: Int, count: Int, format: String
+            key: String, lat: Double, lng: Double, range: Int, code: String?, start: Int, count: Int, format: String
         ): GourmetResponse {
             // ダミーのショップデータ
             val dummyShop = Shop(

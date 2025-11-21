@@ -32,6 +32,7 @@ class ResultViewModel @Inject constructor(
     private var currentLat: Double = 0.0
     private var currentLng: Double = 0.0
     private var currentRange: Int = 3
+    private val targetGenre = "G014" // カフェ・スイーツのジャンルコード
 
     fun searchShops(lat: Double, lng: Double, range: Int) {
         // 新しい検索条件の場合、リセット
@@ -67,6 +68,7 @@ class ResultViewModel @Inject constructor(
                     lat = currentLat,
                     lng = currentLng,
                     range = currentRange,
+                    code = targetGenre, // codeに変更
                     start = (_uiState.value.shops.size) + 1,
                     count = 10
                 )
