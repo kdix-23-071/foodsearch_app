@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import javax.inject.Inject
 
 data class ResultUiState(
@@ -62,23 +63,31 @@ class ResultViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
             try {
-                val response = repository.searchGourmet(
+                val response: GourmetResponse = repository.searchGourmet(
                     lat = currentLat,
                     lng = currentLng,
                     range = currentRange,
                     start = (_uiState.value.shops.size) + 1,
                     count = 10
                 )
+                // APIのレスポンスでshopがnullになる可能性を考慮して安全に取得
                 val newShops = response.results.shop
                 _uiState.update { currentState ->
                     currentState.copy(
                         isLoading = false,
-                        shops = (currentState.shops + newShops) as List<Shop>,
+                        shops = currentState.shops + newShops,
                         canLoadMore = (currentState.shops.size + newShops.size) < response.results.results_available
                     )
                 }
+            } catch (e: HttpException) {
+                _uiState.update { it.copy(isLoading = false, error = "HTTP Error: ${e.code()} ${e.message()}") }
             } catch (e: Exception) {
-                _uiState.update { it.copy(isLoading = false, error = e.message ?: "不明なエラー") }
+                val errorMessage = if (e.message.isNullOrBlank()) {
+                    "エラーが発生しました: ${e::class.java.simpleName}"
+                } else {
+                    e.message
+                }
+                _uiState.update { it.copy(isLoading = false, error = errorMessage) }
             }
         }
     }

@@ -190,7 +190,7 @@ fun ResultScreenPreview() {
                 genre = Genre("居酒屋", "説明", "G001"),
                 budget = Budget("B001", "3000円", "3000円"),
                 catch = "キャッチコピー",
-                capacity = 50,
+                capacity = "50",
                 access = "東京駅徒歩5分",
                 mobileAccess = "東京駅5分",
                 urls = Urls("http://example.com"),

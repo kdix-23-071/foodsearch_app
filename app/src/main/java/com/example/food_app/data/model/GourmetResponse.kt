@@ -14,7 +14,7 @@ data class Results(
     @SerialName("results_available") val results_available: Int,
     @SerialName("results_returned") val results_returned: Int,
     @SerialName("results_start") val results_start: Int,
-    val shop: List<Shop> = emptyList() // shopがない場合も考慮
+    val shop: List<Shop> = emptyList()
 )
 
 //お店の詳細情報リスト
@@ -31,7 +31,7 @@ data class Shop(
     val genre: Genre,
     val budget: Budget,
     val `catch`: String,
-    val capacity: Int,
+    val capacity: String = "", // IntからStringに変更し、空文字対策
     val access: String,
     val other_memo: String = "",
     val parking: String = "",
