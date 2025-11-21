@@ -1,7 +1,7 @@
 package com.example.food_app.interfaces
 
 import com.example.food_app.BuildConfig
-import com.example.food_app.data.GourmetResponse
+import com.example.food_app.data.model.GourmetResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
