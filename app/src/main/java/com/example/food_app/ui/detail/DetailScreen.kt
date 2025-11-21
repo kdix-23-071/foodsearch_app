@@ -107,10 +107,13 @@ fun ShopDetailContent(shop: Shop) {
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Text("サンプルサンプルサンプルサンプル")
-            Text("・サンプルサンプルサンプルサンプルサンプルサンプルサンプルサンプル")
-            Text("・サンプルサンプルサンプルサンプルサンプルサンプルサンプルサンプル")
-            Text("・サンプルサンプルサンプルサンプルサンプルサンプルサンプルサンプル")
+            DetailItem(title = "ジャンル", content = shop.genre.name)
+            DetailItem(title = "予算", content = shop.budget.name)
+            DetailItem(title = "席数", content = shop.capacity.toString())
+            DetailItem(title = "携帯アクセス", content = shop.mobileAccess ?:"情報なし")
+            DetailItem(title = "ホームページ", content = shop.urls.pc ?:"情報なし")
+            DetailItem(title = "駐車場", content = shop.parking ?:"情報なし")
+            DetailItem(title = "その他メモ", content = shop.other_memo ?:"情報なし")
         }
     }
 }
@@ -157,7 +160,9 @@ fun DetailScreenPreview() {
             mobile = MobilePhoto("https://imgfp.hotp.jp/IMGH/28/83/P034812883/P034812883_168.jpg", "https://imgfp.hotp.jp/IMGH/28/83/P034812883/P034812883_100.jpg")
         ),
         open = "月～金: 17:00～23:00\n土日祝: 12:00～23:00",
-        close = "年中無休"
+        close = "年中無休",
+        parking = "なし",
+        other_memo = "特になし"
     )
 
     MaterialTheme {

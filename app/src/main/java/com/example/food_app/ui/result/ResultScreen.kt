@@ -196,7 +196,9 @@ fun ResultScreenPreview() {
                 urls = Urls("http://example.com"),
                 photo = Photo(PcPhoto("", "", ""), MobilePhoto("", "")),
                 open = "17:00-23:00",
-                close = "年中無休"
+                close = "年中無休",
+                parking = "なし",
+                other_memo = "特になし"
             )
             return GourmetResponse(
                 Results(

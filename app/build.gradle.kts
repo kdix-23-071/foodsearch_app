@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 // local.propertiesの読み込み (APIキーを読み取る)
@@ -66,6 +67,9 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.compose.foundation.layout)
+    // Navigation Compose
+    implementation("androidx.navigation:navigation-compose:2.7.7")
+    
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -88,4 +92,6 @@ dependencies {
     //Coil
     implementation("io.coil-kt:coil:2.6.0")
     implementation("io.coil-kt:coil-compose:2.6.0")
+    //HttpLoggingInterceptor
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 }
