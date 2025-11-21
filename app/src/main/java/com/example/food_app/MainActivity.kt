@@ -1,78 +1,86 @@
 package com.example.food_app
 
-import android.content.ContentValues.TAG
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.lifecycleScope
-import com.example.food_app.BuildConfig.HOT_PEPPER_API_KEY
-import com.example.food_app.interfaces.JsonPlaceHolder
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.food_app.ui.detail.DetailScreen
+import com.example.food_app.ui.result.ResultScreen
+import com.example.food_app.ui.search.SearchScreen
 import com.example.food_app.ui.theme.Food_appTheme
-import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
-import java.lang.Exception
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             Food_appTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    FoodAppNavigation()
                 }
-            }
-        }
-    }
-    private val retrofit = Retrofit.Builder()
-        .baseUrl("https://webservice.recruit.co.jp/hotpepper/")
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    val hotPepperAPI = retrofit.create<JsonPlaceHolder>()
-
-    override fun onResume() {
-        super.onResume()
-        lifecycleScope.launch {
-            try {
-                // APIにリクエストを送信
-                val response = hotPepperAPI.search(
-                    key = HOT_PEPPER_API_KEY,
-                    lat = 34.6476217, // 東京駅の緯度
-                    lng = 135.5909042, // 東京駅の経度
-                    range = 3,
-                    start = 1,
-                    count = 10
-                )
-                // 成功ログ
-                Log.d(TAG, "API Response: $response")
-            } catch (e: Exception) {
-                // エラーログ
-                Log.e(TAG, "API call failed", e)
             }
         }
     }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun FoodAppNavigation() {
+    val navController = rememberNavController()
+
+    NavHost(navController = navController, startDestination = "search") {
+        // 検索画面
+        composable("search") {
+            SearchScreen(navController = navController)
+        }
+
+        // 検索結果画面
+        composable(
+            route = "result/{lat}/{lng}/{range}",
+            arguments = listOf(
+                navArgument("lat") { type = NavType.FloatType }, // Doubleはサポート外なのでFloatかStringで受け渡すのが無難だが、今回はDoubleをString経由などで渡すか、Floatで妥協するか。通常緯度経度はDouble推奨。
+                navArgument("lng") { type = NavType.FloatType },
+                navArgument("range") { type = NavType.IntType }
+            )
+        ) { backStackEntry ->
+            val lat = backStackEntry.arguments?.getFloat("lat")?.toDouble() ?: 0.0
+            val lng = backStackEntry.arguments?.getFloat("lng")?.toDouble() ?: 0.0
+            val range = backStackEntry.arguments?.getInt("range") ?: 3
+
+            ResultScreen(
+                lat = lat,
+                lng = lng,
+                range = range,
+                navController = navController
+            )
+        }
+
+        // 店舗詳細画面
+        composable(
+            route = "detail/{shopId}",
+            arguments = listOf(
+                navArgument("shopId") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val shopId = backStackEntry.arguments?.getString("shopId") ?: ""
+            DetailScreen(
+                shopId = shopId,
+                navController = navController
+            )
+        }
+    }
 }
