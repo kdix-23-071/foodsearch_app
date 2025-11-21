@@ -7,8 +7,22 @@ import javax.inject.Inject
 class GourmetRepository @Inject constructor(
     private val apiService: JsonPlaceHolder
 ) {
-    suspend fun searchGourmet(lat: Double, lng: Double, range: Int, start: Int, count: Int): GourmetResponse {
-        return apiService.search(lat = lat, lng = lng, range = range, start = start, count = count)
+    suspend fun searchGourmet(
+        lat: Double, 
+        lng: Double, 
+        range: Int, 
+        code: String? = null, // 引数名をcodeに変更
+        start: Int, 
+        count: Int
+    ): GourmetResponse {
+        return apiService.search(
+            lat = lat, 
+            lng = lng, 
+            range = range, 
+            code = code, // API呼び出しもcode引数を使用
+            start = start, 
+            count = count
+        )
     }
 
     suspend fun fetchGourmetDetail(id: String): GourmetResponse {
